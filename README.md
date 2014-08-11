@@ -14,7 +14,7 @@ It needs a few environment variables defined to work:
     PAGERDUTY_DOMAIN
 
 Those names should be fairly self-explanatory. The domain is the piece of your PagerDuty URL that is specific to you 
-i.e.  https://<PAGERDUTY_DOMAIN>.pagerduty.com/
+i.e.  https://[PAGERDUTY_DOMAIN].pagerduty.com/
 
 
 # Usage
