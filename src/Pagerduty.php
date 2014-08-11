@@ -149,7 +149,7 @@ class Pagerduty {
     protected function getCurrentTimeForTimezone($tz) {
 
         try {
-            $tzObj = new DateTimeZone('Auckland');
+            $tzObj = new DateTimeZone($tz);
         } catch (\Exception $e) {
             // TZ is invalid, try default
             $tzObj = new DateTimeZone(self::DEFAULT_TIMEZONE);
