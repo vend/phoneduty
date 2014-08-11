@@ -44,7 +44,7 @@ Some sample Twimlets:
 ## PagerDuty 
 
 PagerDuty API 
-<http://http://developer.pagerduty.com/documentation/integration/events>
+<http://developer.pagerduty.com/documentation/integration/events>
 
 ## Heroku
 
