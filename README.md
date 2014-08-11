@@ -1,5 +1,7 @@
 # Phoneduty
 
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+
 This is a Twilio Twimlet designed to be hosted on Heroku. It will query PagerDuty to find the currently on-call engineer and forward the inbound call to them.
 
 It needs a few environment variables defined to work:

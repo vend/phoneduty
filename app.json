@@ -1,0 +1,23 @@
+{
+  "name": "Phoneduty",
+  "description": "A Twilio/PagerDuty integration to route incoming calls to the on-call engineer",
+  "repository": "https://github.com/vend/phoneduty",
+  "keywords": [
+    "twilio",
+    "pagerduty",
+    "phone",
+    "on-call"
+  ],
+  "env": {
+    "PAGERDUTY_SCHEDULE_ID": {
+      "description": "The PagerDuty Schdule ID to query"
+    },
+    "PAGERDUTY_API_TOKEN": {
+      "description": "PagerDuty API token"
+    },
+    "PAGERDUTY_DOMAIN": {
+      "description": "The name of your PagerDuty a/c, as it appears in the URL"
+    }
+  }
+}
+
