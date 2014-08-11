@@ -1,0 +1,32 @@
+syntax: glob
+
+# Composer
+composer.phar
+vendor
+
+# Leftover temp old or editor files
+*~
+*.bak
+*.old
+.*.sw?
+
+# OS filesystem metadata
+.DS_Store*
+ethumbs.db
+Thumbs.db
+
+# Eclipse IDE
+.project
+.settings
+.buildpath
+.manager
+.cache
+
+# Netbeans IDE
+nbproject
+
+# PHP Storm IDE
+.idea
+
+# Heroku config variables
+.env
