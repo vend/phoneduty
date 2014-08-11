@@ -144,7 +144,7 @@ class Pagerduty {
      *
      * @param string $tz
      *
-     * @return datetime
+     * @return DateTime
      */
     protected function getCurrentTimeForTimezone($tz) {
 
