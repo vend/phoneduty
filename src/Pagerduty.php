@@ -106,7 +106,6 @@ class Pagerduty {
                     $user = array(
                         'full_name'   => $json['user']['name'],
                         'first_name'  => $this->extractFirstName($json['user']['name']),
-                        'local_time'    => $this->getCurrentTimeForTimezone($json['user']['time_zone']),
                         'phone_number' => "+{$method['country_code']}{$method['phone_number']}",
                     );
                     break;
@@ -157,4 +156,4 @@ class Pagerduty {
 
         return new DateTime('now', $tzObj);
     }
-} 
+}

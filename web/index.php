@@ -32,10 +32,8 @@ if (null !== $userID) {
 
     $twilioResponse = new Services_Twilio_Twiml();
     $response = sprintf("The current on-call engineer is %s. "
-        . "The time in their timezone is %s. "
         . "Please hold while we connect you.",
-        $user['first_name'],
-        $user['local_time']->format('g:ia')
+        $user['first_name']
         );
 
     $twilioResponse->say($response, $attributes);
