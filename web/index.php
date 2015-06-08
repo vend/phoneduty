@@ -48,7 +48,8 @@ if (null !== $userID) {
         );
 
     $twilioResponse->say($response, $attributes);
-    $twilioResponse->dial( $user['phone_number'], $attributes);
+    $dial = $twimlResponse->dial(array("callerId" => "+12132236055"));
+$dial->number($user['phone_number']);
 
     // send response
     if (!headers_sent()) {
