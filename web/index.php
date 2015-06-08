@@ -48,7 +48,7 @@ if (null !== $userID) {
         );
 
     $twilioResponse->say($response, $attributes);
-    $twilioResponse->dial( $user['2132236055'], $attributes);
+    $twilioResponse->dial( $user['phone_number'], $attributes);
 
     // send response
     if (!headers_sent()) {
