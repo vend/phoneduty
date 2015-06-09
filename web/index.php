@@ -32,7 +32,7 @@ if (null !== $userID) {
 
     $attributes = array(
         'voice' => 'alice',
-        'language' => 'en-GB'
+        'language' => 'en-AU'
     );
 
     $time = "";
@@ -41,7 +41,7 @@ if (null !== $userID) {
     }
 
     $twilioResponse = new Services_Twilio_Twiml();
-    $response = sprintf("The current on-call engineer is %s. %s "
+    $response = sprintf("You've called the Aurora Energy RSG tech team. The current on-call person is %s. %s "
         . "Please hold while we connect you.",
         $user['first_name'],
         $time
