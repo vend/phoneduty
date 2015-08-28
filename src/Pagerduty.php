@@ -342,12 +342,26 @@ class Pagerduty {
      *
      */
     public function triggerIncident($data) {
-        $httpTriggerClient = new \GuzzleHttp\Client();
-        $httpTriggerClient->post('https://events.pagerduty.com/generic/2010-04-15/create_event.json', [
-            'json' => $data
-            ]);
-        if ($httpTriggerClient->getStatusCode() != 200) {
-            error_log("PagerDuty returned a " . $httpTriggerClient->getStatusCode() . ", with the message: " . $httpTriggerClient->getBody());
+        $httpTriggerClient = new \GuzzleHttp\Client(
+            array('defaults' =>
+                array('headers' =>
+                    array(
+                        'Content-Type' => 'application/json',
+                    )
+                )
+            )
+        );
+
+        try {
+            $request = $httpTriggerClient->post('https://events.pagerduty.com/generic/2010-04-15/create_event.json', [
+                'body' => json_encode($data)
+                ]);
+        } catch (Exception $e) {
+            error_log('Exception caught: ' . $e->getMessage());
+        }
+
+        if ($request->getStatusCode() != 200) {
+            error_log("PagerDuty returned a " . $request->getStatusCode() . ", with the message: " . $request->getBody());
         }
     }
 }
