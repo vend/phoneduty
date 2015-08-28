@@ -8,16 +8,19 @@ $APItoken        = getenv('PAGERDUTY_API_TOKEN');
 $serviceAPItoken = getenv('PAGERDUTY_SERVICE_API_TOKEN');
 $domain          = getenv('PAGERDUTY_DOMAIN');
 
+session_id($_POST['CallSid']);
+session_start();
+
 $pagerduty = new \Vend\Phoneduty\Pagerduty($APItoken, $serviceAPItoken, $domain);
 
+$twilio = new Services_Twilio_Twiml();
+
+$attributes = array(
+    'voice' => 'alice',
+    'language' => 'en-GB'
+);
+
 if (isset($_POST['RecordingUrl'])) {
-    $attributes = array(
-        'voice' => 'alice',
-        'language' => 'en-GB'
-    );
-
-    $twilio = new Services_Twilio_Twiml();
-
     #create PD incident with link to recording
     $incident_data = Array(
         'service_key' => $serviceAPItoken,
@@ -34,8 +37,26 @@ if (isset($_POST['RecordingUrl'])) {
     $pagerduty->triggerIncident($incident_data);
 
     $twilio->say("Your message has been sent. Thank you.", $attributes);
+
+    session_unset();
+    session_destroy();
+} else {
+    $twilio->say("The on-call engineer isn't available. " .
+        "Please leave a message after the beep describing the issue. " .
+        "Press any key or hang up when you are finished. ", $attributes);
+
+    $twilio->record(array(
+        'action' => 'voicemail.php'
+    ));
 }
 
 $twilio->hangup();
+
+// send response
+if (!headers_sent()) {
+    header('Content-type: text/xml');
+}
+
+echo $twilio;
 
 ?>

@@ -21,41 +21,46 @@ $domain          = getenv('PAGERDUTY_DOMAIN');
 
 // Should we announce the local time of the on-call person?
 // (helps raise awareness you might be getting somebody out of bed)
-$announceTime = getenv('PHONEDUTY_ANNOUNCE_TIME');
+$announceTime    = getenv('PHONEDUTY_ANNOUNCE_TIME');
+
+session_id($_POST['CallSid']);
+session_start();
+$_SESSION['engineer_accepted_call'] = false;
 
 $pagerduty = new \Vend\Phoneduty\Pagerduty($APItoken, $serviceAPItoken, $domain);
 
 $userID = $pagerduty->getOncallUserForSchedule($scheduleID);
 
-$messages['calling_engineer'] = "The current on-call engineer is %s. %s Please hold while we connect you.";
-$messages['no_answer'] = "The on-call engineer isn't available. Please leave a message after the beep describing the issue. Press any key or hang up when you are finished.";
+$twilio = new Services_Twilio_Twiml();
+
+$attributes = array(
+    'voice' => 'alice',
+    'language' => 'en-GB'
+);
 
 if (null !== $userID) {
     $user = $pagerduty->getUserDetails($userID);
-
-    $attributes = array(
-        'voice' => 'alice',
-        'language' => 'en-GB'
-    );
-
-    $twilio = new Services_Twilio_Twiml();
 
     $time = "";
     if ($announceTime && $user['local_time']) {
         $time = sprintf("The current time in their timezone is %s.", $user['local_time']->format('g:ia'));
     }
 
-    $twilio->say(sprintf($messages['calling_engineer'], $user['first_name'], $time), $attributes);
-    $twilio->dial($user['phone_number'], array('timeout' => 20));
-    $twilio->say($messages['no_answer'], $attributes);
-    $twilio->record(array(
-        'action' => 'voicemail.php'
-    ));
+    $twilio->say(sprintf("The current on-call engineer is %s." .
+        "%s Please hold while we connect you.",
+        $user['first_name'], $time), $attributes);
 
-    // send response
-    if (!headers_sent()) {
-        header('Content-type: text/xml');
-    }
-
-    echo $twilio;
+    $dial = $twilio->dial(NULL, array('action' => "check_if_completed_by_human.php", 'timeout' => 45));
+    $dial->number($user['phone_number'], array('url' => "check_for_human.php"));
+} else {
+    $twilio->redirect('voicemail.php');
 }
+
+// send response
+if (!headers_sent()) {
+    header('Content-type: text/xml');
+}
+
+echo $twilio;
+
+?>
