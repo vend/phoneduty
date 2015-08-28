@@ -37,7 +37,7 @@ if (null !== $userID) {
     $twilio = new Services_Twilio_Twiml();
 
     $twilio->say(sprintf($messages['calling_engineer'], $user['first_name']), $attributes);
-    $twilio->dial($user['phone_number'], $attributes);
+    $twilio->dial($user['phone_number']);
     $twilio->say($messages['no_answer'], $attributes);
     $twilio->record(array(
         'action' => 'voicemail.php'

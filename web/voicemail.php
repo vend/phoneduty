@@ -20,7 +20,7 @@ if (isset($_POST['RecordingUrl'])) {
             'type' => 'link');
         'details' => Array(
             'duration' => $_POST['RecordingDuration'],
-            'from' => $_POST['From']
+            'from' => $_POST['From']);
         );
     $pagerduty->triggerIncident($incident_data);
 }
