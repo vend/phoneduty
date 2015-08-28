@@ -46,7 +46,7 @@ if (null !== $userID) {
     }
 
     $twilio->say(sprintf($messages['calling_engineer'], $user['first_name'], $time), $attributes);
-    $twilio->dial($user['phone_number']);
+    $twilio->dial($user['phone_number'], array('timeout' => 20));
     $twilio->say($messages['no_answer'], $attributes);
     $twilio->record(array(
         'action' => 'voicemail.php'
