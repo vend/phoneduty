@@ -12,11 +12,14 @@
     "PAGERDUTY_SCHEDULE_ID": {
       "description": "The PagerDuty Schdule ID to query"
     },
+    "PAGERDUTY_SERVICE_API_TOKEN": {
+      "description": "The service API key that an incident will be created on if a voicemail is left"
+    },
     "PAGERDUTY_API_TOKEN": {
       "description": "PagerDuty API token"
     },
     "PAGERDUTY_DOMAIN": {
-      "description": "The name of your PagerDuty a/c, as it appears in the URL"
+      "description": "The name of your PagerDuty account, as it appears in the URL"
     }
   }
 }

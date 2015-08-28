@@ -17,18 +17,22 @@ class Pagerduty {
     const DEFAULT_TIMEZONE = 'Pacific/Auckland';
 
     protected $APItoken;
+    protected $serviceAPItoken;
     protected $URL;
     protected $httpClient;
 
     /**
-     * Constructor. Expects an API token and PagerDuty domain.
+     * Constructor. Expects an API token, service API token and the PagerDuty
+     * domain.
      *
      * @param string $APItoken
+     * @param string $serviceAPItoken
      * @param string $domain
      *
      */
-    public function __construct($APItoken, $domain) {
+    public function __construct($APItoken, $serviceAPItoken, $domain) {
         $this->APItoken = $APItoken;
+        $this->serviceAPItoken = $serviceAPItoken;
         $this->URL = "https://{$domain}.pagerduty.com/api/v1";
 
         $this->httpClient = new \GuzzleHttp\Client(
@@ -155,5 +159,21 @@ class Pagerduty {
         }
 
         return new DateTime('now', $tzObj);
+    }
+
+    /**
+     * Trigger a PagerDuty incident with the passed $data
+     *
+     * @param array $data
+     *
+     */
+    public function triggerIncident($data) {
+        $httpTriggerClient = new \GuzzleHttp\Client();
+        $httpTriggerClient->post('https://events.pagerduty.com/generic/2010-04-15/create_event.json', [
+            'json' => $data
+            ]);
+        if ($httpTriggerClient->getStatusCode() != 200) {
+            error_log("PagerDuty returned a " . $httpTriggerClient->getStatusCode() . ", with the message: " . $httpTriggerClient->getBody());
+        }
     }
 }

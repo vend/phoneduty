@@ -14,13 +14,17 @@
 require __DIR__ . '/../vendor/autoload.php';
 
 // Set these Heroku config variables
-$scheduleID = getenv('PAGERDUTY_SCHEDULE_ID');
-$APItoken   = getenv('PAGERDUTY_API_TOKEN');
-$domain     = getenv('PAGERDUTY_DOMAIN');
+$scheduleID      = getenv('PAGERDUTY_SCHEDULE_ID');
+$APItoken        = getenv('PAGERDUTY_API_TOKEN');
+$serviceAPItoken = getenv('PAGERDUTY_SERVICE_API_TOKEN');
+$domain          = getenv('PAGERDUTY_DOMAIN');
 
-$pagerduty = new \Vend\Phoneduty\Pagerduty($APItoken, $domain);
+$pagerduty = new \Vend\Phoneduty\Pagerduty($APItoken, $serviceAPItoken, $domain);
 
 $userID = $pagerduty->getOncallUserForSchedule($scheduleID);
+
+$messages['calling_engineer'] = "The current on-call engineer is %s. Please hold while we connect you.";
+$messages['no_answer'] = "The on-call engineer isn't available. Please leave a message after the beep describing the issue. Press any key or hang up when you are finished.";
 
 if (null !== $userID) {
     $user = $pagerduty->getUserDetails($userID);
@@ -30,19 +34,19 @@ if (null !== $userID) {
         'language' => 'en-GB'
     );
 
-    $twilioResponse = new Services_Twilio_Twiml();
-    $response = sprintf("The current on-call engineer is %s. "
-        . "Please hold while we connect you.",
-        $user['first_name']
-        );
+    $twilio = new Services_Twilio_Twiml();
 
-    $twilioResponse->say($response, $attributes);
-    $twilioResponse->dial( $user['phone_number'], $attributes);
+    $twilio->say(sprintf($messages['calling_engineer'], $user['first_name']), $attributes);
+    $twilio->dial($user['phone_number'], $attributes);
+    $twilio->say($messages['no_answer'], $attributes);
+    $twilio->record(array(
+        'action' => 'voicemail.php'
+    ));
 
     // send response
     if (!headers_sent()) {
         header('Content-type: text/xml');
     }
 
-    echo $twilioResponse;
+    echo $twilio;
 }
