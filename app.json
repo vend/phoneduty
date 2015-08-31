@@ -20,6 +20,11 @@
     },
     "PAGERDUTY_DOMAIN": {
       "description": "The name of your PagerDuty account, as it appears in the URL"
+    },
+    "PHONEDUTY_ANNOUNCE_TIME": {
+      "description": "Should we announce the time to the caller before connecting to an Engineer?",
+      "value": "false",
+      "required": false
     }
   }
 }

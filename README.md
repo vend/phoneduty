@@ -5,15 +5,16 @@
 
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
-This is a Twilio Twimlet designed to be hosted on Heroku. It will query PagerDuty to find the currently on-call engineer and forward the inbound call to them.
+This is a Twilio Twimlet designed to be hosted on Heroku. It will query PagerDuty to find the currently on-call engineer and forward the inbound call to them. If there is no one on-call or if the on-call engineer doesn't answer, the caller will be prompted to leave a message which will trigger an incident within PagerDuty.
 
 It needs a few environment variables defined to work:
 
     PAGERDUTY_SCHEDULE_ID
     PAGERDUTY_API_TOKEN
+    PAGERDUTY_SERVICE_API_TOKEN
     PAGERDUTY_DOMAIN
 
-Those names should be fairly self-explanatory. The domain is the piece of your PagerDuty URL that is specific to you 
+Those names should be fairly self-explanatory. The domain is the piece of your PagerDuty URL that is specific to you
 i.e.  https://[PAGERDUTY_DOMAIN].pagerduty.com/
 
 You can also optionally set PHONEDUTY_ANNOUNCE_TIME, which if set to a TRUEish value will include the current
@@ -27,6 +28,7 @@ somebody out of bed, so be gentle :D
 - Ensure your rostered staff have a 'phone' contact method defined
 - Note the schedule ID of the roster you wish to use.
 - Create and note an API key in PagerDuty
+- Create the PagerDuty service for any voice messages and note the service API key
 - Deploy this app to Heroku.
 - Configure the relevant environment variables above in Heroku
 - Buy a phone number from Twilio
@@ -45,9 +47,9 @@ Some sample Twimlets:
 <https://www.twilio.com/labs/twimlets>
 
 
-## PagerDuty 
+## PagerDuty
 
-PagerDuty API 
+PagerDuty API
 <http://developer.pagerduty.com/documentation/integration/events>
 
 ## Heroku
