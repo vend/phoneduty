@@ -18,6 +18,7 @@ $scheduleID      = getenv('PAGERDUTY_SCHEDULE_ID');
 $APItoken        = getenv('PAGERDUTY_API_TOKEN');
 $serviceAPItoken = getenv('PAGERDUTY_SERVICE_API_TOKEN');
 $domain          = getenv('PAGERDUTY_DOMAIN');
+$greeting        = getenv('PHONEDUTY_ANNOUNCE_GREETING');
 
 // Should we announce the local time of the on-call person?
 // (helps raise awareness you might be getting somebody out of bed)
@@ -41,15 +42,19 @@ $attributes = array(
     'language' => 'en-GB'
 );
 
+if ($greeting != '') {
+    $twilio->say(sprintf("%s", $greeting), $attributes);
+}
+
 if ($user !== null) {
     $time = "";
     if (($announceTime == 'true' || $announceTime == 'True') && $user['local_time']) {
         $time = sprintf(" The current time in their timezone is %s.", $user['local_time']->format('g:ia'));
     }
 
-    $twilio->say(sprintf("The current on-call engineer is %s." .
+    $twilio->say(sprintf("%s The current on-call engineer is %s." .
         "%s Please hold while we connect you.",
-        $user['first_name'], $time), $attributes);
+        $greeting, $user['first_name'], $time), $attributes);
 
     $dial = $twilio->dial(NULL, array('action' => "check_if_completed_by_human.php", 'timeout' => 25));
     $dial->number($user['phone_number'], array('url' => "check_for_human.php"));

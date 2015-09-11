@@ -21,8 +21,13 @@
     "PAGERDUTY_DOMAIN": {
       "description": "The name of your PagerDuty account, as it appears in the URL"
     },
+    "PHONEDUTY_ANNOUNCE_GREETING": {
+      "description": "Optional: Any additional greeting to add before the 'The current on-call engineer is' announcement.",
+      "value": "false",
+      "required": false
+    },
     "PHONEDUTY_ANNOUNCE_TIME": {
-      "description": "Should we announce the time to the caller before connecting to an Engineer?",
+      "description": "Optional: Should we announce the time to the caller before connecting to an Engineer? Defaults to False if not set.",
       "value": "false",
       "required": false
     }
