@@ -23,13 +23,16 @@ $domain          = getenv('PAGERDUTY_DOMAIN');
 // (helps raise awareness you might be getting somebody out of bed)
 $announceTime    = getenv('PHONEDUTY_ANNOUNCE_TIME');
 
-session_id($_POST['CallSid']);
+if (isset($_POST['CallSid']) {
+    session_id($_POST['CallSid']);
+}
 session_start();
 $_SESSION['engineer_accepted_call'] = false;
 
 $pagerduty = new \Vend\Phoneduty\Pagerduty($APItoken, $serviceAPItoken, $domain);
 
 $userID = $pagerduty->getOncallUserForSchedule($scheduleID);
+$user = $pagerduty->getUserDetails($userID);
 
 $twilio = new Services_Twilio_Twiml();
 
@@ -39,10 +42,8 @@ $attributes = array(
 );
 
 if (null !== $userID) {
-    $user = $pagerduty->getUserDetails($userID);
-
     $time = "";
-    if ($announceTime && $user['local_time']) {
+    if (($announceTime == 'true' || $announceTime == 'True') && $user['local_time']) {
         $time = sprintf("The current time in their timezone is %s.", $user['local_time']->format('g:ia'));
     }
 
@@ -50,7 +51,7 @@ if (null !== $userID) {
         "%s Please hold while we connect you.",
         $user['first_name'], $time), $attributes);
 
-    $dial = $twilio->dial(NULL, array('action' => "check_if_completed_by_human.php", 'timeout' => 45));
+    $dial = $twilio->dial(NULL, array('action' => "check_if_completed_by_human.php", 'timeout' => 30));
     $dial->number($user['phone_number'], array('url' => "check_for_human.php"));
 } else {
     $twilio->redirect('voicemail.php');

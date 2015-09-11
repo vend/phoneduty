@@ -76,6 +76,9 @@ class Pagerduty {
         if ($response->getStatusCode() == 200) {
             $json = json_decode($response->getBody(), true);
             $userID = $json['schedule']['final_schedule']['rendered_schedule_entries'][0]['user']['id'];
+        } else {
+            error_log("Problem retrieving current user from PagerDuty for schedule ID " . $scheduleID);
+            error_log("Status Code: " . $response->getStatusCode());
         }
 
         return $userID;
@@ -117,6 +120,9 @@ class Pagerduty {
                     break;
                 }
             }
+        } else {
+            error_log("Problem retrieving current user details from PagerDuty for user ID " . $userID);
+            error_log("Status Code: " . $response->getStatusCode());
         }
 
         return $user;
