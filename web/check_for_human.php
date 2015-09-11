@@ -22,7 +22,7 @@ if (isset($_POST['Digits'])) {
     }
 } else {
     $twilio->pause(array('length' => 2));
-    $gather = $twilio->gather(array('timeout' => 15, 'numDigits' => 1));
+    $gather = $twilio->gather(array('timeout' => 10, 'numDigits' => 1));
     $gather->say("Press 1 to accept this call.", $attributes);
     $twilio->say("Goodbye.", $attributes);
     $twilio->hangup();

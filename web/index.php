@@ -44,14 +44,14 @@ $attributes = array(
 if ($user !== null) {
     $time = "";
     if (($announceTime == 'true' || $announceTime == 'True') && $user['local_time']) {
-        $time = sprintf("The current time in their timezone is %s.", $user['local_time']->format('g:ia'));
+        $time = sprintf(" The current time in their timezone is %s.", $user['local_time']->format('g:ia'));
     }
 
     $twilio->say(sprintf("The current on-call engineer is %s." .
         "%s Please hold while we connect you.",
         $user['first_name'], $time), $attributes);
 
-    $dial = $twilio->dial(NULL, array('action' => "check_if_completed_by_human.php", 'timeout' => 30));
+    $dial = $twilio->dial(NULL, array('action' => "check_if_completed_by_human.php", 'timeout' => 25));
     $dial->number($user['phone_number'], array('url' => "check_for_human.php"));
 } else {
     $twilio->redirect('voicemail.php');
