@@ -2,7 +2,7 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
-if (isset($_POST['ParentCallSid']) {
+if (isset($_POST['ParentCallSid'])) {
     session_id($_POST['ParentCallSid']);
 }
 session_start();

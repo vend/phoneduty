@@ -8,7 +8,7 @@ $APItoken        = getenv('PAGERDUTY_API_TOKEN');
 $serviceAPItoken = getenv('PAGERDUTY_SERVICE_API_TOKEN');
 $domain          = getenv('PAGERDUTY_DOMAIN');
 
-if (isset($_POST['CallSid']) {
+if (isset($_POST['CallSid'])) {
     session_id($_POST['CallSid']);
 }
 session_start();

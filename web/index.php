@@ -23,7 +23,7 @@ $domain          = getenv('PAGERDUTY_DOMAIN');
 // (helps raise awareness you might be getting somebody out of bed)
 $announceTime    = getenv('PHONEDUTY_ANNOUNCE_TIME');
 
-if (isset($_POST['CallSid']) {
+if (isset($_POST['CallSid'])) {
     session_id($_POST['CallSid']);
 }
 session_start();
