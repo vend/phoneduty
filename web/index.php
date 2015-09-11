@@ -52,9 +52,9 @@ if ($user !== null) {
         $time = sprintf(" The current time in their timezone is %s.", $user['local_time']->format('g:ia'));
     }
 
-    $twilio->say(sprintf("%s The current on-call engineer is %s." .
+    $twilio->say(sprintf("The current on-call engineer is %s." .
         "%s Please hold while we connect you.",
-        $greeting, $user['first_name'], $time), $attributes);
+        $user['first_name'], $time), $attributes);
 
     $dial = $twilio->dial(NULL, array('action' => "check_if_completed_by_human.php", 'timeout' => 25));
     $dial->number($user['phone_number'], array('url' => "check_for_human.php"));
