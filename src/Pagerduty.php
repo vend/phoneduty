@@ -17,18 +17,22 @@ class Pagerduty {
     const DEFAULT_TIMEZONE = 'Pacific/Auckland';
 
     protected $APItoken;
+    protected $serviceAPItoken;
     protected $URL;
     protected $httpClient;
 
     /**
-     * Constructor. Expects an API token and PagerDuty domain.
+     * Constructor. Expects an API token, service API token and the PagerDuty
+     * domain.
      *
      * @param string $APItoken
+     * @param string $serviceAPItoken
      * @param string $domain
      *
      */
-    public function __construct($APItoken, $domain) {
+    public function __construct($APItoken, $serviceAPItoken, $domain) {
         $this->APItoken = $APItoken;
+        $this->serviceAPItoken = $serviceAPItoken;
         $this->URL = "https://{$domain}.pagerduty.com/api/v1";
 
         $this->httpClient = new \GuzzleHttp\Client(
@@ -72,6 +76,9 @@ class Pagerduty {
         if ($response->getStatusCode() == 200) {
             $json = json_decode($response->getBody(), true);
             $userID = $json['schedule']['final_schedule']['rendered_schedule_entries'][0]['user']['id'];
+        } else {
+            error_log("Problem retrieving current user from PagerDuty for schedule ID " . $scheduleID);
+            error_log("Status Code: " . $response->getStatusCode());
         }
 
         return $userID;
@@ -113,6 +120,9 @@ class Pagerduty {
                     break;
                 }
             }
+        } else {
+            error_log("Problem retrieving current user details from PagerDuty for user ID " . $userID);
+            error_log("Status Code: " . $response->getStatusCode());
         }
 
         return $user;
@@ -330,4 +340,36 @@ class Pagerduty {
 
         return (array_key_exists($tz, $timezones) ? $timezones[$tz] : null);
     }
+
+    /**
+     * Trigger a PagerDuty incident with the passed $data
+     *
+     * @param array $data
+     *
+     */
+    public function triggerIncident($data) {
+        $httpTriggerClient = new \GuzzleHttp\Client(
+            array('defaults' =>
+                array('headers' =>
+                    array(
+                        'Content-Type' => 'application/json',
+                    )
+                )
+            )
+        );
+
+        try {
+            $request = $httpTriggerClient->post('https://events.pagerduty.com/generic/2010-04-15/create_event.json', [
+                'body' => json_encode($data)
+                ]);
+        } catch (Exception $e) {
+            error_log('Exception caught: ' . $e->getMessage());
+        }
+
+        if ($request->getStatusCode() != 200) {
+            error_log("PagerDuty returned a " . $request->getStatusCode() . ", with the message: " . $request->getBody());
+        }
+    }
 }
+
+?>
