@@ -41,7 +41,7 @@ $attributes = array(
     'language' => 'en-GB'
 );
 
-if (null !== $userID) {
+if ($user !== null) {
     $time = "";
     if (($announceTime == 'true' || $announceTime == 'True') && $user['local_time']) {
         $time = sprintf("The current time in their timezone is %s.", $user['local_time']->format('g:ia'));
