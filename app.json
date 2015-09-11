@@ -23,7 +23,7 @@
     },
     "PHONEDUTY_ANNOUNCE_GREETING": {
       "description": "Optional: Any additional greeting to add before the 'The current on-call engineer is' announcement.",
-      "value": "false",
+      "value": "",
       "required": false
     },
     "PHONEDUTY_ANNOUNCE_TIME": {
