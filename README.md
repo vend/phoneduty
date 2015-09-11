@@ -21,6 +21,8 @@ You can also optionally set PHONEDUTY_ANNOUNCE_TIME, which if set to a TRUEish v
 time of the engineer being called as part of the answering message. This may help raise awareness that you are potentially getting
 somebody out of bed, so be gentle :D
 
+Additionally, you can optionally set a greeting to be played to the caller before connecting them to the on-call engineer or asking them to leave a voicemail with the PHONEDUTY_ANNOUNCE_GREETING configuration option.
+
 
 # Usage
 
