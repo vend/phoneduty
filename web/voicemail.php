@@ -8,6 +8,14 @@ $APItoken        = getenv('PAGERDUTY_API_TOKEN');
 $serviceAPItoken = getenv('PAGERDUTY_SERVICE_API_TOKEN');
 $domain          = getenv('PAGERDUTY_DOMAIN');
 
+// What language should Twilio use?
+$language        = getenv('TWILIO_LANGUAGE');
+
+$attributes = array(
+    'voice' => 'alice',
+    'language' => $language
+);
+
 if (isset($_POST['CallSid'])) {
     session_id($_POST['CallSid']);
 }
@@ -17,23 +25,18 @@ $pagerduty = new \Vend\Phoneduty\Pagerduty($APItoken, $serviceAPItoken, $domain)
 
 $twilio = new Services_Twilio_Twiml();
 
-$attributes = array(
-    'voice' => 'alice',
-    'language' => 'en-GB'
-);
-
 if (isset($_POST['RecordingUrl'])) {
     #create PD incident with link to recording
     $incident_data = Array(
         'service_key' => $serviceAPItoken,
         'event_type' => 'trigger',
-        'description' => 'New voicemail for the on-call engineer',
+        'description' => 'New voicemail from ' . $_POST['From'],
         'contexts' => [ Array(
             'type' => 'link',
             'text' => 'Listen to the message',
             'href' => $_POST['RecordingUrl'] . '.mp3')],
         'details' => Array(
-            'duration' => $_POST['RecordingDuration'],
+            'duration' => $_POST['RecordingDuration'] . ' seconds',
             'from' => $_POST['From'])
         );
     $pagerduty->triggerIncident($incident_data);

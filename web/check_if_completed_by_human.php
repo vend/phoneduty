@@ -7,10 +7,13 @@ if (isset($_POST['CallSid'])) {
 }
 session_start();
 
+// What language should Twilio use?
+$language        = getenv('TWILIO_LANGUAGE');
+
 $attributes = array(
     'voice' => 'alice',
-    'language' => 'en-GB'
-    );
+    'language' => $language
+);
 
 $twilio = new Services_Twilio_Twiml();
 
