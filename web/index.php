@@ -60,7 +60,7 @@ if (isset($_POST['Digits'])) {
     }
 }
 
-if (!isset($_SESSION['end_user_confirmed_call']) and $validate_human == strtolower("true")) {
+if (!isset($_SESSION['end_user_confirmed_call']) and strtolower($validate_human) == 'true') {
     $gather = $twilio->gather(array('timeout' => 25, 'numDigits' => 1));
     $gather->say("Press 1 to reach the on-call engineer.", $attributes);
     $twilio->say("Goodbye.", $attributes);
@@ -77,8 +77,8 @@ if (!isset($_SESSION['end_user_confirmed_call']) and $validate_human == strtolow
             $user['first_name'], $time), $attributes);
 
         $dialvars = array('action' => "check_if_completed_by_human.php", 'timeout' => 25);
-        if (!$record != strtolower("false")) {
-            if ($record == strtolower("true")) {
+        if (strtolower($record) != 'false') {
+            if (strtolower($record) == 'true') {
                 $dialvars['record'] = "true";
             } else {
                 $dialvars['record'] = $record;
