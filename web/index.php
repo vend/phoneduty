@@ -56,22 +56,17 @@ if ($greeting != '') {
 
 if (isset($_POST['Digits'])) {
     if ($_POST['Digits'] != '') {
-        $_SESSION['end_user_confirmed_call'] = true;
+        $_SESSION['end_user_confirmed_call'] = True;
     }
 }
 
-error_log($_SESSION['end_user_confirmed_call'] . " " . $validate_human);
-
-if (!$_SESSION['end_user_confirmed_call'] or $_SESSION['end_user_confirmed_call'] == ''){
-    if ($validate_human == strtolower("true")) {
+if (!isset($_SESSION['end_user_confirmed_call'] and $validate_human == strtolower("true"))) {
         $gather = $twilio->gather(array('timeout' => 25, 'numDigits' => 1));
         $gather->say("Press 1 to reach the on-call engineer.", $attributes);
         $twilio->say("Goodbye.", $attributes);
         $twilio->hangup();
     }
-}
-
-if ($_SESSION['end_user_confirmed_call'] or $_SESSION['end_user_confirmed_call'] != '' or $validate_human == strtolower("false")) {
+} else {
     if ($user !== null) {
         $time = "";
         if ($announceTime == strtolower("true") && $user['local_time']) {
