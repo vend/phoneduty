@@ -31,6 +31,11 @@
       "value": "false",
       "required": false
     },
+    "PHONEDUTY_PHONEDUTY_CHECK_FOR_HUMAN": {
+      "description": "Optional: Should we ask the caller to press a button before connecting to an Engineer? Defaults to False if not set.",
+      "value": "false",
+      "required": false
+    },
     "TWILIO_LANGUAGE": {
       "description": "What language should Twilio use? Default is en-GB.",
       "value": "en-GB",
