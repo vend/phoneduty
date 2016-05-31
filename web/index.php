@@ -60,7 +60,7 @@ if (isset($_POST['Digits'])) {
     }
 }
 
-error_log($_SESSION['end_user_confirmed_call'] . " " . $validate_human)
+error_log($_SESSION['end_user_confirmed_call'] . " " . $validate_human);
 
 if (!$_SESSION['end_user_confirmed_call']){
     if ($validate_human == strtolower("true")) {
