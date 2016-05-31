@@ -24,6 +24,13 @@ $greeting        = getenv('PHONEDUTY_ANNOUNCE_GREETING');
 // (helps raise awareness you might be getting somebody out of bed)
 $announceTime    = getenv('PHONEDUTY_ANNOUNCE_TIME');
 
+// What language should Twilio use?
+$language        = getenv('TWILIO_LANGUAGE');
+
+// Should we record the conversation once connected to the on-call person?
+// https://www.twilio.com/docs/api/twiml/dial#attributes-record
+$record          = getenv('TWILIO_RECORD');
+
 if (isset($_POST['CallSid'])) {
     session_id($_POST['CallSid']);
 }
@@ -39,7 +46,7 @@ $twilio = new Services_Twilio_Twiml();
 
 $attributes = array(
     'voice' => 'alice',
-    'language' => 'en-GB'
+    'language' => $language
 );
 
 if ($greeting != '') {
@@ -55,8 +62,16 @@ if ($user !== null) {
     $twilio->say(sprintf("The current on-call engineer is %s." .
         "%s Please hold while we connect you.",
         $user['first_name'], $time), $attributes);
-
-    $dial = $twilio->dial(NULL, array('action' => "check_if_completed_by_human.php", 'timeout' => 25));
+    
+    $dialvars = array('action' => "check_if_completed_by_human.php", 'timeout' => 25);
+    if ($record != strtolower("false")) {
+        if ($record == strtolower("true")) {
+            $dialvars['record'] = "true";
+        } else {
+            $dialvars['record'] = $record;
+        }
+    }
+    $dial = $twilio->dial(NULL, $dialvars);
     $dial->number($user['phone_number'], array('url' => "check_for_human.php"));
 } else {
     $twilio->redirect('voicemail.php');

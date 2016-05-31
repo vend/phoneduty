@@ -30,6 +30,16 @@
       "description": "Optional: Should we announce the time to the caller before connecting to an Engineer? Defaults to False if not set.",
       "value": "false",
       "required": false
+    },
+    "TWILIO_LANGUAGE": {
+      "description": "What language should Twilio use? Default is en-GB.",
+      "value": "en-GB",
+      "required": true
+    },
+    "TWILIO_RECORD": {
+      "description": "Optional: Should we record the conversation? Defaults to False if not set.",
+      "value": "false",
+      "required": false
     }
   }
 }
