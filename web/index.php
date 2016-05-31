@@ -61,11 +61,10 @@ if (isset($_POST['Digits'])) {
 }
 
 if (!isset($_SESSION['end_user_confirmed_call'] and $validate_human == strtolower("true"))) {
-        $gather = $twilio->gather(array('timeout' => 25, 'numDigits' => 1));
-        $gather->say("Press 1 to reach the on-call engineer.", $attributes);
-        $twilio->say("Goodbye.", $attributes);
-        $twilio->hangup();
-    }
+    $gather = $twilio->gather(array('timeout' => 25, 'numDigits' => 1));
+    $gather->say("Press 1 to reach the on-call engineer.", $attributes);
+    $twilio->say("Goodbye.", $attributes);
+    $twilio->hangup();
 } else {
     if ($user !== null) {
         $time = "";
