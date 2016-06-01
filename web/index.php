@@ -50,10 +50,6 @@ $attributes = array(
     'language' => $language
 );
 
-if ($greeting != '') {
-    $twilio->say(sprintf("%s", $greeting), $attributes);
-}
-
 if (isset($_POST['Digits'])) {
     if ($_POST['Digits'] != '') {
         $_SESSION['end_user_confirmed_call'] = True;
@@ -61,11 +57,21 @@ if (isset($_POST['Digits'])) {
 }
 
 if (!isset($_SESSION['end_user_confirmed_call']) and strtolower($validate_human) == 'true') {
+    if ($greeting != '') {
+        $twilio->say($greeting, $attributes);
+        $_SESSION['caller_greeted'] = True;
+    }
     $gather = $twilio->gather(array('timeout' => 25, 'numDigits' => 1));
     $gather->say("Press 1 to reach the on-call engineer.", $attributes);
     $twilio->say("Goodbye.", $attributes);
     $twilio->hangup();
 } else {
+    if ($greeting != '') {
+        if ($_SESSION['caller_greeted']) {
+            $twilio->say($greeting, $attributes);
+            $_SESSION['caller_greeted'] = True;
+        }
+    }
     if ($user !== null) {
         $time = "";
         if ($announceTime == strtolower("true") && $user['local_time']) {
