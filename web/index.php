@@ -67,7 +67,7 @@ if (!isset($_SESSION['end_user_confirmed_call']) and strtolower($validate_human)
     $twilio->hangup();
 } else {
     if ($greeting != '') {
-        if (isset($_SESSION['caller_greeted'])) {
+        if (!isset($_SESSION['caller_greeted'])) {
             $twilio->say($greeting, $attributes);
             $_SESSION['caller_greeted'] = True;
         }
