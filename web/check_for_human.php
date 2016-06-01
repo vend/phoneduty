@@ -20,7 +20,6 @@ $twilio = new Services_Twilio_Twiml();
 if (isset($_POST['Digits'])) {
     if ($_POST['Digits'] != '') {
         $_SESSION['engineer_accepted_call'] = true;
-        error_log("session ID: " . session_id() . "; engineer_accepted_call: " . $_SESSION['engineer_accepted_call']);
         $twilio->say("Connecting", $attributes);
     }
 } else {

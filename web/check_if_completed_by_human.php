@@ -20,7 +20,6 @@ $twilio = new Services_Twilio_Twiml();
 if (isset($_POST['DialCallStatus'])) {
     if ($_POST['DialCallStatus'] == 'completed') {
         if ($_SESSION['engineer_accepted_call']) {
-            error_log("engineer_accepted_call is true");
             $twilio->hangup();
         }
     }
