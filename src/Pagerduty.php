@@ -14,32 +14,28 @@ use \DateInterval;
 
 class Pagerduty {
 
-    const DEFAULT_TIMEZONE = 'Pacific/Auckland';
+    const DEFAULT_TIMEZONE = 'Europe/Paris';
 
     protected $APItoken;
     protected $URL;
     protected $httpClient;
 
     /**
-     * Constructor. Expects an API token and PagerDuty domain.
+     * Constructor. Expects a PagerDuty API token.
      *
      * @param string $APItoken
-     * @param string $domain
      *
      */
-    public function __construct($APItoken, $domain) {
+    public function __construct($APItoken) {
         $this->APItoken = $APItoken;
-        $this->URL = "https://{$domain}.pagerduty.com/api/v1";
+        $this->URL = "https://api.pagerduty.com";
 
         $this->httpClient = new \GuzzleHttp\Client(
-            array('defaults' =>
-                array('headers' =>
-                    array(
-                        'Content-Type' => 'application/json',
-                        'Authorization' => "Token token={$APItoken}"
-                    )
-                )
-            )
+            ['headers' =>
+                [ 'Accept' => 'application/vnd.pagerduty+json;version=2',
+                  'Authorization' => "Token token=$APItoken"
+                ]
+            ]
         );
     }
 
@@ -62,7 +58,7 @@ class Pagerduty {
         $datetime->add(new DateInterval('PT1S'));
         $oneSecondLater = urlencode($datetime->format(DateTime::ISO8601));
 
-        $pagerDutyScheduleURL = "{$this->URL}/schedules/{$scheduleID}?since={$now}&until={$oneSecondLater}";
+        $pagerDutyScheduleURL = "{$this->URL}/schedules/{$scheduleID}?time_zone=UTC&since={$now}&until={$oneSecondLater}";
 
         $userID = null;
 
@@ -92,7 +88,11 @@ class Pagerduty {
     {
         // See http://developer.pagerduty.com/documentation/rest/users/show
         $pagerDutyUserURL = "{$this->URL}/users/{$userID}";
-        $queryString = array('query' => array('include[]' => 'contact_methods'));
+        $queryString = [
+            'query' => [
+                'include[]' => 'contact_methods'
+            ]
+        ];
 
         $response = $this->httpClient->get($pagerDutyUserURL, $queryString);
 
@@ -102,14 +102,14 @@ class Pagerduty {
             $json = json_decode($response->getBody(), true);
 
             foreach($json['user']['contact_methods'] as $method) {
-                if($method['type'] == 'phone') {
-                    $user = array(
+                if($method['type'] == 'phone_contact_method') {
+                    $user = [
                         'full_name'   => $json['user']['name'],
                         'first_name'  => $this->extractFirstName($json['user']['name']),
                         'local_time'    => $this->getCurrentTimeForTimezone(
                             $this->convertFriendlyTimezoneToFull($json['user']['time_zone'])),
-                        'phone_number' => "+{$method['country_code']}{$method['phone_number']}",
-                    );
+                        'phone_number' => "+{$method['country_code']}{$method['address']}",
+                    ];
                     break;
                 }
             }
@@ -331,3 +331,4 @@ class Pagerduty {
         return (array_key_exists($tz, $timezones) ? $timezones[$tz] : null);
     }
 }
+?>
