@@ -14,9 +14,6 @@
     },
     "PAGERDUTY_API_TOKEN": {
       "description": "PagerDuty API token"
-    },
-    "PAGERDUTY_DOMAIN": {
-      "description": "The name of your PagerDuty a/c, as it appears in the URL"
     }
   }
 }
