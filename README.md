@@ -13,12 +13,14 @@ It needs a few environment variables defined to work:
     PAGERDUTY_API_TOKEN
     PAGERDUTY_DOMAIN
 
-Those names should be fairly self-explanatory. The domain is the piece of your PagerDuty URL that is specific to you 
+Those names should be fairly self-explanatory. The domain is the piece of your PagerDuty URL that is specific to you
 i.e.  https://[PAGERDUTY_DOMAIN].pagerduty.com/
 
 You can also optionally set PHONEDUTY_ANNOUNCE_TIME, which if set to a TRUEish value will include the current
 time of the engineer being called as part of the answering message. This may help raise awareness that you are potentially getting
 somebody out of bed, so be gentle :D
+
+You can optionally set PAGERDUTY_FALLBACK_SCHEDULE_ID to a fallback schedule in case the first call fails.
 
 
 # Usage
@@ -45,17 +47,12 @@ Some sample Twimlets:
 <https://www.twilio.com/labs/twimlets>
 
 
-## PagerDuty 
+## PagerDuty
 
-PagerDuty API 
+PagerDuty API
 <http://developer.pagerduty.com/documentation/integration/events>
 
 ## Heroku
 
 Setting up and deploying PHP apps on Heroku
 <https://devcenter.heroku.com/articles/getting-started-with-php>
-
-
-
-
-

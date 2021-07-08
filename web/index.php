@@ -15,6 +15,7 @@ require __DIR__ . '/../vendor/autoload.php';
 
 // Set these Heroku config variables
 $scheduleID = getenv('PAGERDUTY_SCHEDULE_ID');
+$fallbackScheduleID = getenv('PAGERDUTY_FALLBACK_SCHEDULE_ID');
 $APItoken   = getenv('PAGERDUTY_API_TOKEN');
 $domain     = getenv('PAGERDUTY_DOMAIN');
 
@@ -22,6 +23,10 @@ $domain     = getenv('PAGERDUTY_DOMAIN');
 // (helps raise awareness you might be getting somebody out of bed)
 $announceTime = getenv('PHONEDUTY_ANNOUNCE_TIME');
 
+$dialCallStatus = $_GET['DialCallStatus'];
+if ($fallbackScheduleID != null && $dialCallStatus != null && $dialCallStatus != 'completed') {
+    $scheduleID = $fallbackScheduleID;
+}
 
 $pagerduty = new \Vend\Phoneduty\Pagerduty($APItoken, $domain);
 
@@ -48,7 +53,14 @@ if (null !== $userID) {
         );
 
     $twilioResponse->say($response, $attributes);
-    $twilioResponse->dial( $user['phone_number']);
+    if ($scheduleID == $fallbackScheduleID) {
+        $twilioResponse->dial($user['phone_number']);
+    } else {
+        $twilioResponse->dial($user['phone_number'], array(
+            'action' => '/',
+            'method' => 'GET'
+        ));
+    }
 
     // send response
     if (!headers_sent()) {
