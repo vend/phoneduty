@@ -21,7 +21,7 @@
     "require": {
         "php": ">=5.3.8",
         "twilio/sdk": "dev-master",
-        "guzzlehttp/guzzle": "~4.0"
+        "guzzlehttp/guzzle": "~5.3"
     },
 
     "config": {
